@@ -34,6 +34,7 @@ if len(sys.argv) < 4:
 # Set up local listener socket
 local = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print "\033[31m---\033[0m binding socket to port %s" % sys.argv[1]
+local.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 local.bind(('', int(sys.argv[1])))
 print "\033[31m---\033[0m listening"
 local.listen(1)

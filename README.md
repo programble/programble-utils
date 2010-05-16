@@ -18,6 +18,14 @@ which you will connect your client to. Remote address is the address
 of the remote server which you want the proxy to connect to, and
 remote port is the port to connect to.
 
+While Proxpy is running, you may send data to the local connected
+client as if the remote server had sent it by typing `>`, and then the
+string of data. The data will be added to the buffer and will be sent
+along with any other data the remote server has sent.
+
+Similarly, you can send data to the remote server as if the local
+client had sent it by first typing `<`, then the data to be sent.
+
 #### Examples
 
     proxpy.py 6667 irc.freenode.net 6667

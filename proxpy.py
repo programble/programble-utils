@@ -26,7 +26,7 @@ import sys
 from select import select
 
 # Command-line arguments
-# tproxy.py <local port> <remote address> <remote port>
+# proxy.py <local port> <remote address> <remote port>
 if len(sys.argv) < 4:
     print "Usage: %s <local port> <remote address> <remote port>" % sys.argv[0]
     sys.exit(1)

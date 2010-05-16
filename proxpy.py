@@ -58,7 +58,7 @@ remotebuffer = ""
 # Main loop
 try:
     while True:
-        read, write, error = select([local, remote], [], [local, remote], 5.0)
+        read, write, error = select([local, remote, sys.stdin], [], [local, remote], 5.0)
         
         # Check if closed
         _, write, _ = select([], [local, remote], [], 0.0)
@@ -92,6 +92,19 @@ try:
             x = local.send(remotebuffer)
             print "\033[33m>>>\033[0m %s" % remotebuffer[:x]
             remotebuffer = remotebuffer[x:]
+
+        # Read from standard input
+        if sys.stdin in read:
+            x = raw_input()
+            if len(x) == 0:
+                continue
+            direction = x[0]
+            if direction == '>':
+                # Send to local
+                remotebuffer += x[1:] + "\n"
+            elif direction == '<':
+                # Send to remote
+                localbuffer += x[1:] + "\n"
             
 except KeyboardInterrupt:
     print "\033[31m---\033[0m closing sockets"

@@ -135,10 +135,17 @@ try:
                 localbuffer += x[1:] + "\n"
             
 except KeyboardInterrupt:
-    print "\033[31m---\033[0m closing sockets"
+    pass
 except Exception, e:
     print "\033[31m---\033[0m error: %s" % e
 finally:
+    print "\033[31m---\033[0m closing sockets"
     local.close()
     remote.close()
+    if len(localbuffer) or len(remotebuffer):
+        print "\033[31m---\033[0m buffer contents:"
+    if len(localbuffer):
+        print "\033[32m<<<\033[0m%s" % localbuffer
+    if len(remotebuffer):
+        print "\033[33m>>>\033[0m%s" % remotebuffer
 

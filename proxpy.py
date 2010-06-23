@@ -31,10 +31,18 @@ if len(sys.argv) < 4:
     print "Usage: %s <local port> <remote address> <remote port>" % sys.argv[0]
     sys.exit(1)
 
+# Validate arguments
+try:
+    int(sys.argv[1])
+    int(sys.argv[3])
+except ValueError:
+    print "Invalid port number"
+    sys.exit(1)
+
 # Set up local listener socket
 local = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print "\033[31m---\033[0m binding socket to port %s" % sys.argv[1]
-local.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+local.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # To allow port reuse upon crash
 local.bind(('', int(sys.argv[1])))
 print "\033[31m---\033[0m listening"
 local.listen(1)

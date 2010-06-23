@@ -56,7 +56,13 @@ local = x[0]
 # Connect to remote server
 print "\033[31m---\033[0m connecting to remote server %s:%s" % (sys.argv[2], sys.argv[3])
 remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-remote.connect((sys.argv[2], int(sys.argv[3])))
+try:
+    remote.connect((sys.argv[2], int(sys.argv[3])))
+except (socket.error, socket.gaierror), e:
+    print "\033[31m---\033[0m %s" % e
+    print "\033[31m---\033[0m closing local connection"
+    local.close()
+    sys.exit(1)
 print "\033[31m---\033[0m established connection, starting relay"
 
 # Relay buffers

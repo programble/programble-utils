@@ -72,17 +72,15 @@ remotebuffer = ""
 # Main loop
 try:
     while True:
-        read, write, error = select([local, remote, sys.stdin], [], [local, remote], 5.0)
+        # Which sockets need to be written to?
+        write = []
+        if len(localbuffer):
+            write.append(remote)
+        if len(remotebuffer):
+            write.append(local)
         
-        # Check if closed
-        _, write, _ = select([], [local, remote], [], 0.0)
-        if local not in write:
-            print "\033[31m---\033[0m local socket closed"
-            break
-        if remote not in write:
-            print "\033[31m---\033[0m remote socket closed"
-            break 
-        
+        read, write, error = select([local, remote, sys.stdin], write, [local, remote])
+                
         # Check for errors
         if local in error:
             print "\033[31m---\033[0m error on local socket"
@@ -93,18 +91,34 @@ try:
         
         # Read from sockets
         if local in read:
-            localbuffer += local.recv(4096)
+            try:
+                localbuffer += local.recv(4096)
+            except socket.error, e:
+                print "\033[31m---\033[0m local socket read error: %s" % e
+                break
         if remote in read:
-            remotebuffer += remote.recv(4096)
+            try:
+                remotebuffer += remote.recv(4096)
+            except socket.error, e:
+                print "\033[31m---\033[0m remote socket read error: %s" % e
+                break
         
         # Relay data
-        if len(localbuffer):
-            x = remote.send(localbuffer)
-            print "\033[32m<<<\033[0m %s" % localbuffer[:x]
+        if remote in write:
+            try:
+                x = remote.send(localbuffer)
+            except socket.error, e:
+                print "\033[31m---\033[0m remote socket write error: %s" % e
+                break
+            print "\033[32m<<<\033[0m%s" % localbuffer[:x]
             localbuffer = localbuffer[x:]
-        if len(remotebuffer):
-            x = local.send(remotebuffer)
-            print "\033[33m>>>\033[0m %s" % remotebuffer[:x]
+        if local in write:
+            try:
+                x = local.send(remotebuffer)
+            except socket.error, e:
+                print "\033[31m---\033[0m local socket write error: %s" % e
+                break
+            print "\033[33m>>>\033[0m%s" % remotebuffer[:x]
             remotebuffer = remotebuffer[x:]
 
         # Read from standard input

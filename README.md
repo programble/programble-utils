@@ -58,3 +58,19 @@ In Conky:
 
     ${texeci 3600 /path/to/updates.sh}
 
+
+PBFC
+----
+
+PBFC is a Brainfuck to C compiler written in BASH.
+
+### Usage
+
+    pbfc source.bf [size]
+
+Size defaults to 5000, and determines the amount of cells available to
+the Brainfuck program.
+
+PBFC will output a `.bf.c` file, which contains the generated C code,
+along with an executable file compiled by the C compiler from this
+code.

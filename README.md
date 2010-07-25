@@ -74,3 +74,61 @@ the Brainfuck program.
 PBFC will output a `.bf.c` file, which contains the generated C code,
 along with an executable file compiled by the C compiler from this
 code.
+
+Squish
+------
+
+Squish is a little shell script that squishes things.
+
+### Dependencies
+
+ * curl
+ * imagemagick
+ * gzip
+ * tar
+ * bzip2
+
+### Installation
+
+To install Squish, run
+    ./squish.sh -install squish.sh
+
+As user, Squish will be installed to `~/bin/sq`. As root, Squish will
+be installed to `/usr/bin/sq`.
+
+### Usage
+
+Squish can squish URLs, images, files, and directories.
+
+#### URLs
+
+Squish will create an is.gd shortened URL.
+
+    $ sq http://github.com/programble/programble-utils
+    http://is.gd/dI6SU
+
+#### Images
+
+Squish will create a thumbnail of the image 128 pixels wide.
+
+    $ sq awesome_face.png
+    awesome_face_thumb.png
+    
+#### Files
+
+Squish will either gzip (default) or bzip2 a file.
+
+    $ sq giant_virtual_disk.img
+    giant_virtual_disk.img.gz
+    $ sq -bzip2 giant_virtual_disk.img
+    giant_virtual_disk.img.bz2
+
+#### Directories
+
+Squish will tar and either gzip (default) or bzip2 a directory.
+
+    $ sq images/
+    images.tar.gz
+    $ sq -tarbzip2 images/
+    image.tar.bz2
+    

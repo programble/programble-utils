@@ -132,3 +132,12 @@ Squish will tar and either gzip (default) or bzip2 a directory.
     $ sq -tarbzip2 images/
     image.tar.bz2
     
+Ed Clone
+--------
+
+Ed is the standard text editor.
+
+### Compilation
+
+To compile Ed, run
+    gcc -o ed ed.c
